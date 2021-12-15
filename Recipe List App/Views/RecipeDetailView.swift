@@ -42,7 +42,10 @@ struct RecipeDetailView: View {
                         .padding([.bottom, .top], 5)
                     
                     ForEach (recipe.ingredients) { item in
-                        Text("• " + item.name)
+                        Text("• "
+                             + RecipeModel.getPortion(ingredient: item, recipeServing: recipe.servings, targetServings: selectedServingSize)
+                             + " "
+                             + item.name)
                     }
                 }
                 .padding(.horizontal)
