@@ -10,6 +10,7 @@ import SwiftUI
 struct RecipeFeaturedView: View {
     @EnvironmentObject var model:RecipeModel
     @State var isDetailViewShowing = false
+    @State var tabSelectionIndex = 0
     var body: some View {
         VStack(alignment:.leading) {
             Text("Featured Recipes")
@@ -18,7 +19,7 @@ struct RecipeFeaturedView: View {
                 .padding(.top, 40)
                 .font(.largeTitle)
             GeometryReader { geo in
-                TabView {
+                TabView(selection: $tabSelectionIndex) { // keeps track of the index
                     // loop show featured
                     ForEach(0..<model.recipes.count){ index in
                         // Only show the featured recipes
@@ -39,7 +40,7 @@ struct RecipeFeaturedView: View {
                                             .padding(5)
                                     }
                                 }
-                            })
+                            }).tag(index)
                                 .sheet(isPresented: $isDetailViewShowing) {
                                    // show the detail view
                                     RecipeDetailView(recipe:model.recipes[index])
@@ -60,11 +61,21 @@ struct RecipeFeaturedView: View {
             }
             VStack(alignment: .leading, spacing: 10){
                 Text("Preperation Time:").font(.headline)
-                Text("2 hours")
+                Text(model.recipes[tabSelectionIndex].prepTime)
                 Text("Highlights:").font(.headline)
-                Text("Frozen from Supermarket")
+                // use the recipehighlights view here! very cool
+                RecipeHighlights(highlights: model.recipes[tabSelectionIndex].highlights)
             }
+        }.onAppear(perform: {
+            setFeaturedIndex()
+        })
+    }
+    func setFeaturedIndex(){
+        // find first
+        let index = model.recipes.firstIndex { (recipe) -> Bool in
+            return recipe.featured
         }
+        tabSelectionIndex = index ?? 0
     }
 }
 
