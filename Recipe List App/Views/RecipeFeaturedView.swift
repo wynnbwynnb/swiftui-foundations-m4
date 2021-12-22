@@ -17,7 +17,8 @@ struct RecipeFeaturedView: View {
                 .bold()
                 .padding(.leading)
                 .padding(.top, 40)
-                .font(.largeTitle)
+                //.font(.largeTitle)
+                .font(Font.custom("Avenir Heavy", size: 24))
             GeometryReader { geo in
                 TabView(selection: $tabSelectionIndex) { // keeps track of the index
                     // loop show featured
@@ -37,7 +38,7 @@ struct RecipeFeaturedView: View {
                                             .resizable().clipped()
                                             .aspectRatio(contentMode: .fill)
                                         Text(model.recipes[index].name)
-                                            .padding(5)
+                                            .padding(5).font(Font.custom("Avenir", size: 25))
                                     }
                                 }
                             }).tag(index)
@@ -60,12 +61,15 @@ struct RecipeFeaturedView: View {
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode:.always))
             }
             VStack(alignment: .leading, spacing: 10){
-                Text("Preperation Time:").font(.headline)
-                Text(model.recipes[tabSelectionIndex].prepTime)
-                Text("Highlights:").font(.headline)
+                Text("Preperation Time:").font(Font.custom("Avenir Heavy", size: 16))
+                Text(model.recipes[tabSelectionIndex].prepTime).font(Font.custom("Avenir", size: 15))
+                
+                Text("Highlights:").font(Font.custom("Avenir Heavy", size: 16))
                 // use the recipehighlights view here! very cool
                 RecipeHighlights(highlights: model.recipes[tabSelectionIndex].highlights)
+                    
             }
+            .padding([.leading, .bottom])
         }.onAppear(perform: {
             setFeaturedIndex()
         })
